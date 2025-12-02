@@ -1,0 +1,36 @@
+-- init_db.sql
+CREATE DATABASE IF NOT EXISTS career_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE career_db;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  age INT NULL,
+  interest VARCHAR(255) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS skills (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  komunikasi INT DEFAULT 0,
+  creativity INT DEFAULT 0,
+  problem_solving INT DEFAULT 0,
+  time_management INT DEFAULT 0,
+  digital_literacy INT DEFAULT 0,
+  total_points INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS results (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  recommended VARCHAR(255) NOT NULL,
+  score INT NOT NULL,
+  details TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
