@@ -76,7 +76,7 @@ $career_paths = [
 
     /* ----------------- 4. DATA ANALYST ----------------- */
     "Data Analyst" => [
-        "skills" => ["Analisis Data","SQL","Manajemen Waktu"],
+        "skills" => ["Analisis Data","Manajemen Waktu"],
         "playlist" => "https://youtube.com/playlist?list=PLUaB-1hjhk8FE_XZ87vPPSfHqb6OcM0cF&si=pken2g5xwQFMQiE8",
         "resources" => [
             "Google Data Analytics (Coursera audit)" => "https://www.coursera.org/professional-certificates/google-data-analytics",
