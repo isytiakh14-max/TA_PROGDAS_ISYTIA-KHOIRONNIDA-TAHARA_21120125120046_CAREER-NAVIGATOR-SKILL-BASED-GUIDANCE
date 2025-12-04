@@ -132,7 +132,6 @@ $career_paths = [
 
 ];
 
-// Ambil nilai skill terakhir
 $stmt = $conn->prepare("SELECT * FROM skills WHERE user_id = ? ORDER BY created_at DESC LIMIT 1");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -140,7 +139,6 @@ $res = $stmt->get_result();
 $last_skills = $res->fetch_assoc() ?? null;
 $stmt->close();
 
-/* Helper: get skill value from last_skills row */
 function get_skill_value($row, $skillLabel) {
     $col = strtolower(str_replace(" ", "_", $skillLabel));
     return intval($row[$col] ?? 0);
@@ -149,7 +147,6 @@ function get_skill_value($row, $skillLabel) {
 $analyzer = new CareerAnalyzer();
 $queue = new CareerQueue();
 
-// Masukkan career ke dalam object Career dan Queue
 foreach ($career_paths as $name => $info) {
     $careerObj = new Career(
         $name,
@@ -159,10 +156,9 @@ foreach ($career_paths as $name => $info) {
     );
 
     $analyzer->addCareer($careerObj);
-    $queue->enqueue($careerObj->getName()); // queue untuk daftar urut
+    $queue->enqueue($careerObj->getName()); 
 }
 
-// Ambil nilai skill dalam bentuk array untuk analisa
 $skillValues = [];
 foreach ($last_skills as $k => $v) {
     if ($k != "id" && $k != "user_id" && $k != "created_at" && $k != "total_points") {
@@ -170,23 +166,21 @@ foreach ($last_skills as $k => $v) {
     }
 }
 
-// Hitung skor menggunakan POLYMORPHISM
 $scores = $analyzer->evaluate($skillValues);
 
-// Order career dari Queue (struktur data)
+
 $ordered = [];
 while (!$queue->isEmpty()) {
     $c = $queue->dequeue();
     $ordered[] = $c;
 }
 
-// Sort berdasarkan skor
 usort($ordered, function($a, $b) use ($scores) {
     return $scores[$b] <=> $scores[$a];
 });
 
 $best_career = $ordered[0] ?? null;
-$THRESHOLD = 70; // untuk skill gap
+$THRESHOLD = 70; 
 
 ?>
 <!DOCTYPE html>
@@ -197,8 +191,6 @@ $THRESHOLD = 70; // untuk skill gap
     <link rel="stylesheet" href="css/styles.css">
 
     <style>
-    /* ===================== ANIMATED BACKGROUND ===================== */
-
     .animated-bg {
         position: fixed;
         top: 0;
@@ -218,8 +210,6 @@ $THRESHOLD = 70; // untuk skill gap
         100% { background-position: 0% 50%; }
     }
 
-    /* ================================================================ */
-    /* BUTTON PLAYLIST + RESOURCE */
     .btn-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
     .playlist-btn, .resource-btn {
         display:inline-flex;
@@ -238,13 +228,11 @@ $THRESHOLD = 70; // untuk skill gap
 
     .btn-icon { font-size:1.05rem; opacity:0.95; }
 
-    /* CARD HOVER EFFECT */
     .rec.card { position: relative; transition: transform .12s ease; }
     .rec.card:hover { transform: translateY(-4px); }
     .rec.best { border: 2px solid #f5d76e; background: linear-gradient(180deg, rgba(245,215,110,0.04), rgba(255,255,255,0.01)); }
     .badge-best { position: absolute; right: 16px; top: 16px; background: #f5d76e; color: #111; padding: 6px 10px; border-radius: 999px; font-weight:800; font-size:0.85rem; }
 
-    /* SKILL BAR */
     .small {
     color: #7B3BA8;
     font-weight: 600;
@@ -287,13 +275,11 @@ input::placeholder {
     color: rgba(74, 23, 110, 0.55);
 }
 
-    /* RESPONSIVE */
     @media(max-width:700px){
         .btn-row { gap:6px; }
         .playlist-btn, .resource-btn { font-size:0.85rem; padding:7px 10px; }
     }
 
-/* === Career Title Colors === */
 .rec.card h3 {
     color: #4A176E !important;
     font-weight: 800;
@@ -302,9 +288,6 @@ input::placeholder {
     color: #A67C2D !important;
 }
 
-/* ================= BEST MATCH GOLD DARK + SHIMMER ================= */
-
-/* Badge Best Match */
 .badge-best {
     background: #C89B3C !important;
     color: white !important;
@@ -313,7 +296,6 @@ input::placeholder {
     overflow: hidden;
 }
 
-/* shimmer diagonal pada badge */
 .badge-best::after {
     content: "";
     position: absolute;
@@ -335,7 +317,6 @@ input::placeholder {
     0% { transform: translate(-150%, -150%) rotate(25deg); }
     100% { transform: translate(150%, 150%) rotate(25deg); }
 }
-/* ================= CARD BEST MATCH ================= */
 
 .rec.best {
     border: 2.5px solid #A67C2D !important;
@@ -348,7 +329,6 @@ input::placeholder {
     overflow: hidden;
 }
 
-/* shimmer lembut di seluruh card */
 .rec.best::before {
     content: "";
     position: absolute;
@@ -369,7 +349,6 @@ input::placeholder {
     50% { transform: translate(30%, 30%); }
     100% { transform: translate(-30%, -30%); }
 }
-/* ================= SPARKLES (TITIK KERLAP-KERLIP) ================= */
 
 .rec.best::after {
     content: "";
@@ -407,7 +386,6 @@ input::placeholder {
 
 <body>
 
-<!-- Background animasi -->
 <div class="animated-bg"></div>
 
 <header class="topbar">
@@ -474,7 +452,6 @@ input::placeholder {
 
     </section>
 
-    <!-- ================= REKOMENDASI ================= -->
 <section class="recommendations">
 <?php if ($last_skills && $last_skills['total_points'] > 0): ?>
 
