@@ -237,14 +237,14 @@ $THRESHOLD = 70;
 }
     .skill-bar {
     height: 10px;
-    background: rgba(120, 60, 160, 0.18); /* ungu muda transparan */
+    background: rgba(120, 60, 160, 0.18); 
     border-radius: 6px;
     overflow: hidden;
     width: 100%;
 }
 .skill-fill {
     height: 100%;
-    background: linear-gradient(90deg, #A04BFF, #FF70D7); /* ungu → pink neon lembut */
+    background: linear-gradient(90deg, #A04BFF, #FF70D7);
     width: 0%;
 }
 .muted {
