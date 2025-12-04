@@ -1,5 +1,4 @@
 <?php
-// login.php
 require 'config.php';
 $err = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -13,8 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (password_verify($password, $row['password'])) {
                 $_SESSION['user_id'] = $row['id'];
                 $_SESSION['user_name'] = $row['name'];
-                header("Location: dashboard.php");
-                exit;
+                if ($email === 'admin@example.com') {
+    header("Location: admin.php");
+} else {
+    header("Location: dashboard.php");
+}
+exit;
+
             } else $err = "Email atau password salah.";
         } else $err = "Email atau password salah.";
     } else $err = "Isi email & password.";
@@ -37,3 +41,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 </body>
 </html>
+
