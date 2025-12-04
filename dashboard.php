@@ -10,7 +10,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Ambil data user
 $stmt_user = $conn->prepare("SELECT name, age, interest FROM users WHERE id = ?");
 $stmt_user->bind_param("i", $user_id);
 $stmt_user->execute();
@@ -18,7 +17,6 @@ $res_user = $stmt_user->get_result();
 $user = $res_user->fetch_assoc();
 $stmt_user->close();
 
-// Daftar skill (label tampilan)
 $skills_list = [
     "Komunikasi","Creativity","Problem Solving","Manajemen Waktu","Digital Literacy",
     "Analisis Data","Leadership","Organisasi","Koding Dasar","Design Grafis",
