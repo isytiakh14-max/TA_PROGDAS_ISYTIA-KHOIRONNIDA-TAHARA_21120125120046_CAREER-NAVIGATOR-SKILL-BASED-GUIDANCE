@@ -378,21 +378,88 @@ input::placeholder {
 .rec.card li div {
     color: #4A176E !important;
 }
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 26px;
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-btn {
+    padding: 7px 14px;
+    background: #8645C6;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.nav-btn:hover {
+    background: #6d32ac;
+}
+
+.logout-btn {
+    background: #e74c3c;
+}
+
+.logout-btn:hover {
+    background: #c0392b;
+}
+.nav-btn, .logout-btn {
+    display: inline-block !important;
+    text-decoration: none !important;
+    color: white !important;
+    border-radius: 8px !important;
+    padding: 7px 14px !important;
+    font-weight: 600 !important;
+}
+.topbar a.nav-btn,
+.topbar a.logout-btn {
+    all: unset;
+    display: inline-block !important;
+    padding: 7px 14px !important;
+    background: #8645C6 !important;
+    color: white !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+}
+
+.topbar a.logout-btn {
+    background: #e74c3c !important;
+}
 
     </style>
 </head>
 
 <body>
+    
+    
 
 <div class="animated-bg"></div>
 
 <header class="topbar">
     <div class="brand">Career Navigator</div>
     <div class="nav-right">
-        <span>Hai, <?= htmlspecialchars($user['name']) ?></span> |
-        <a href="profile.php">Profil</a> |
-        <a href="logout.php">Logout</a>
-    </div>
+    <span>Hai, <?= htmlspecialchars($user['name']) ?></span>
+
+    <a class="nav-btn" href="profile.php">Profil</a>
+    <a class="nav-btn logout-btn" href="logout.php">Logout</a>
+</div>
+
 </header>
 
 <main class="container">
@@ -429,15 +496,31 @@ input::placeholder {
                     $v = $last_skills[$db] ?? 0;
                 ?>
                     <label><?= htmlspecialchars($s) ?></label>
-                    <input type="range"
-                           name="<?= htmlspecialchars($db) ?>"
-                           min="0" max="100"
-                           value="<?= htmlspecialchars($v) ?>"
-                           oninput="document.getElementById('val_<?= htmlspecialchars($db) ?>').innerText=this.value">
 
-                    <div class="small">
-                        <span id="val_<?= htmlspecialchars($db) ?>"><?= htmlspecialchars($v) ?></span>/100
-                    </div>
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+
+    <!-- SLIDER -->
+    <input 
+        type="range"
+        class="skill-slider"
+        name="<?= htmlspecialchars($db) ?>"
+        data-target="num_<?= htmlspecialchars($db) ?>"
+        min="0" max="100"
+        value="<?= htmlspecialchars($v) ?>"
+        style="flex:1;"
+    >
+
+    <!-- INPUT ANGKA -->
+    <input 
+        type="number"
+        class="skill-number"
+        id="num_<?= htmlspecialchars($db) ?>"
+        value="<?= htmlspecialchars($v) ?>"
+        min="0" max="100"
+        style="width:60px;"
+    >
+</div>
+
                 <?php endforeach; ?>
 
                 <button class="btn" type="submit">Lihat Rekomendasi</button>
@@ -544,6 +627,31 @@ input::placeholder {
 </main>
 
 <footer>© <?= date("Y") ?> Career Navigator</footer>
+<script>
+document.querySelectorAll(".skill-slider").forEach(slider => {
+    slider.addEventListener("input", function () {
+        const numberInput = document.getElementById(this.dataset.target);
+        if (numberInput) numberInput.value = this.value;
+    });
+});
+
+document.querySelectorAll(".skill-number").forEach(num => {
+    num.addEventListener("input", function () {
+
+        let val = Number(this.value);
+
+        if (val < 0) val = 0;
+        if (val > 100) val = 100;
+
+        this.value = val;
+
+        const slider = document.querySelector(
+            `.skill-slider[data-target="${this.id}"]`
+        );
+        if (slider) slider.value = val;
+    });
+});
+</script>
 
 </body>
 </html>
